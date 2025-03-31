@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Quiz</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        #quiz, #result {
+            background: white;
+            max-width: 400px;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .choice {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0;
+            background: linear-gradient(135deg, #a18cd1, #fbc2eb);
+            border: none;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: 0.3s;
+        }
+        .choice:hover {
+            background: linear-gradient(135deg, #ff758c, #ff7eb3);
+        }
+        .nav-buttons {
+            display: flex;
+            justify-content: center;
+            margin-top: 10px;
+        }
+        .nav-buttons button {
+            background: #ff758c;
+            border: none;
+            color: white;
+            padding: 12px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: 0.3s;
+            margin: auto;
+        }
+        .nav-buttons button:hover {
+            background: #ff5252;
+        }
+        #result {
+            display: none;
+            font-size: 22px;
+            font-weight: bold;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="quiz">
+        <h2 id="question"></h2>
+        <div id="choices"></div>
+        <div class="nav-buttons">
+            <button id="back">Back</button>
+        </div>
+    </div>
+
+    <div id="result"></div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const quizData = [
+                { question: "Who is known as GOD of Cricket?", choices: ["Sachin Tendulkar", "Rohit Sharma", "MS Dhoni", "Dale Steyn"], answer: "Sachin Tendulkar" },
+                { question: "Which team won the IPL in the year 2016?", choices: ["Sunrisers Hyderabad", "Mumbai Indians", "Kolkata Knight Riders", "Rajasthan Royals"], answer: "Sunrisers Hyderabad" },
+                { question: "Who is the Captain of Royal Challengers Bangalore?", choices: ["Bhuvneshwar Kumar", "Virat Kohli", "Rajat Patidar", "Liam Livingstone"], answer: "Rajat Patidar" },
+                { question: "How many runs did Virat Kohli score in the IPL season 2016?", choices: ["890", "973", "567", "480"], answer: "973" },
+                { question: "Who was the Player Of The Tournament in the ICC Men's Cricket ODI World Cup 2011?", choices: ["MS Dhoni", "Zaheer Khan", "Suresh Raina", "Yuvraj Singh"], answer: "Yuvraj Singh" },
+                { question: "How many IPL Trophies did Mumbai Indians have till now?", choices: ["2", "4", "5", "1"], answer: "5" },
+                { question: "Who rewarded the POTM in ICC Champions Trophy Final?", choices: ["Rohit Sharma ", "Hardik Pandya ", "Varun Chakrawarthy", "Ravindra Jadeja"], answer: "Rohit Sharma " }
+            ];
+
+            let currentQuestion = 0;
+            let score = 0;
+            const questionElement = document.getElementById("question");
+            const choicesContainer = document.getElementById("choices");
+            const backButton = document.getElementById("back");
+            const resultContainer = document.getElementById("result");
+            
+            function loadQuestion() {
+                questionElement.textContent = quizData[currentQuestion].question;
+                choicesContainer.innerHTML = "";
+                quizData[currentQuestion].choices.forEach(choice => {
+                    const button = document.createElement("button");
+                    button.textContent = choice;
+                    button.classList.add("choice");
+                    button.addEventListener("click", checkAnswer);
+                    choicesContainer.appendChild(button);
+                });
+            }
+            
+            function checkAnswer(event) {
+                if (event.target.textContent === quizData[currentQuestion].answer) {
+                    score++;
+                }
+                currentQuestion++;
+                if (currentQuestion < quizData.length) {
+                    loadQuestion();
+                } else {
+                    displayResult();
+                }
+            }
+            
+            function displayResult() {
+                document.getElementById("quiz").style.display = "none";
+                resultContainer.textContent = `You scored ${score} out of ${quizData.length}`;
+                resultContainer.style.display = "block";
+            }
+            
+            backButton.addEventListener("click", () => {
+                if (currentQuestion > 0) {
+                    currentQuestion--;
+                    loadQuestion();
+                }
+            });
+            
+            loadQuestion();
+        });
+    </script>
+
+</body>
+</html>
